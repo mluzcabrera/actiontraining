@@ -12,8 +12,8 @@ on:
 jobs:
   build:
     steps:
-      - name: Say hello
+      - name: Upload to Nexus
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
         run: |
-          curl -u ${{vars.username}}:${{secrets.password}} --upload-file ${{inputs.pathtobinary}} ${{vars.repo}}
+          curl -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_url}}
