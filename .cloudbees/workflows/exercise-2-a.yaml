@@ -12,6 +12,12 @@ on:
 jobs:
   build:
     steps:
+      - name: List artifacts in repo
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run:  |
+          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+             "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Create file
         uses: docker://curlimages/curl:latest
         shell: sh
