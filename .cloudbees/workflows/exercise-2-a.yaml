@@ -15,7 +15,7 @@ jobs:
       - name: Create file
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
-        run: echo "This is an example file" > ${{inputs.pathtobinary}}
+        run: echo "This is an example file - $(date)" > ${{inputs.pathtobinary}}
       - name: Upload to Nexus
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
