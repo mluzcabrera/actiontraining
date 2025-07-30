@@ -26,7 +26,7 @@ jobs:
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          curl -v -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_url}}
+          curl -v -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_repo}}
       - name: List artifacts in repo
         uses: docker://curlimages/curl:latest
         shell: sh
