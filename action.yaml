@@ -2,23 +2,45 @@ apiVersion: automation.cloudbees.io/v1alpha1
 kind: action
 name: mlcb action 001
 inputs:
-  string-val:  # id of input
-    description: 'sample string'
-    required: false
+  pathtobinary:  
+    description: 'Path to binary'
+    required: true
 
 
 runs:
   using: composite
   steps:
-    - id: invoke-action
-      name: invoke-action (action step name)
-      uses: docker://golang:1.20.3-alpine3.17 
-      shell: sh
-      run: |
-        echo "Hello there!" 
-    - id: invoke-action2
-      name: invoke-action2 (action step name)
-      uses: docker://golang:1.20.3-alpine3.17 
-      shell: sh
-      run: |
-        echo "Hello there!" 
+      - name: Print vars
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          echo  ${{vars.nexus_training_actions_user}} - ${{vars.nexus_training_actions_repo}}
+      - name: List artifacts in repo
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+             "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
+      - name: Create file
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: echo "This is an example file - $(date)" > ${{inputs.pathtobinary}}
+      - name: Upload to Nexus
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          curl -v -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_repo}}
+      - name: List artifacts in repo
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+             "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
+      - name: Register built artifact
+        uses: cloudbees-io/register-build-artifact@v1
+        with:
+          version: 1.0.0
+          url: https://hub.docker.com/repository/docker/example
+          digest: sha256:abcdef1234567890
+          name: ${{inputs.pathtobinary}}
+
