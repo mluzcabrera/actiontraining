@@ -1,0 +1,16 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: Exercise 3 A
+on:
+  workflow_dispatch:
+jobs:
+  use-action:
+    steps:
+      - name: use action (job step name)
+        uses: mluzcabrera/testaction@main
+        with:
+          string-val: 'test string'
+      - name: use action2 (job step name)
+        uses: mluzcabrera/testaction@main
+        with:
+          string-val: 'test string'
