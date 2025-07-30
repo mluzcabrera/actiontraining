@@ -3,10 +3,15 @@ kind: workflow
 name: Exercise 3 A
 on:
   workflow_dispatch:
+    inputs:
+      pathtobinary:
+        type: string
+        default: example.txt
+        required: true
 jobs:
   use-action:
     steps:
       - name: Create Upload and Register binary
         uses: mluzcabrera/actiontraining@main
         with:
-          string-val: 'test string'
+          pathtobinary: ${{inputs.pathtobinary}}
