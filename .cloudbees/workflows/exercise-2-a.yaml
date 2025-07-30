@@ -8,19 +8,18 @@ on:
         type: string
         default: example.txt
         required: true
-
 jobs:
   build:
     steps:
       - name: Print vars
         uses: docker://curlimages/curl:latest
         shell: sh
-        run:  |
+        run: |
           echo  ${{vars.nexus_training_actions_user}} - ${{vars.nexus_training_actions_repo}}
       - name: List artifacts in repo
         uses: docker://curlimages/curl:latest
         shell: sh
-        run:  |
+        run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Create file
@@ -35,6 +34,18 @@ jobs:
       - name: List artifacts in repo
         uses: docker://curlimages/curl:latest
         shell: sh
-        run:  |
+        run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
+      - name: register-artifact-step-with-options
+        uses: cloudbees-io-gha/register-build-artifact@v3
+        with:
+          name: ${{inputs.pathtobinary}}
+          url: https://hub.docker.com/repository/docker/example
+          version: 1.0.0
+          commit: 1234abcd-ab34-123cd-56ef-12345678abcd
+          digest: sha256:abcdef1234567890
+          label: staging,prod
+          repository-url: http://github.com/example/repo
+          ref: main
+          type: Docker
