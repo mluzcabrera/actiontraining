@@ -9,7 +9,7 @@ on:
         default: example.txt
         required: true
 jobs:
-  use-action:
+  create_upload_register_binary:
     steps:
       - name: Create Upload and Register binary
         uses: mluzcabrera/actiontraining@main
