@@ -26,7 +26,7 @@ jobs:
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          curl -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+          curl -v -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
               --upload-file ${{inputs.pathtobinary}} \
               -H "Content-Disposition: attachment; filename=${{inputs.pathtobinary}}" \
               ${{vars.nexus_training_actions_url}}
@@ -36,4 +36,3 @@ jobs:
         run:  |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
-             | jq -r '.items[].assets[].downloadUrl'
