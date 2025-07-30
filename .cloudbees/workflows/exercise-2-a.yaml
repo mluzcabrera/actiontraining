@@ -37,15 +37,10 @@ jobs:
         run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
-      - name: register-artifact-step-with-options
-        uses: cloudbees-io-gha/register-build-artifact@v3
+      - name: Register built artifact
+        uses: cloudbees-io/register-build-artifact@v1
         with:
-          name: ${{inputs.pathtobinary}}
-          url: https://hub.docker.com/repository/docker/example
           version: 1.0.0
-          commit: 1234abcd-ab34-123cd-56ef-12345678abcd
+          url: https://hub.docker.com/repository/docker/example
           digest: sha256:abcdef1234567890
-          label: staging,prod
-          repository-url: http://github.com/example/repo
-          ref: main
-          type: Docker
+          name: ${{inputs.pathtobinary}}
