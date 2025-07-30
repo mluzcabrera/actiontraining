@@ -1,6 +1,6 @@
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: action
-name: mlcb action 001
+name: Create Upload and Register binary
 inputs:
   pathtobinary:  
     description: 'Path to binary'
