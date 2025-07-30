@@ -4,10 +4,11 @@ name: Exercise 2 A
 on:
   workflow_dispatch:
     inputs:
-      name:
+      pathtobinary:
         type: string
-        default: Mariluz
+        default: username.jar
         required: true
+
 jobs:
   build:
     steps:
@@ -15,4 +16,4 @@ jobs:
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
         run: |
-          echo "hello ${{inputs.name}}"
+          curl -u ${{vars.username}}:${{secrets.password}} --upload-file ${{inputs.pathtobinary}} ${{vars.repo}}
