@@ -12,6 +12,11 @@ on:
 jobs:
   build:
     steps:
+      - name: Print vars
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run:  |
+          echo  ${{vars.nexus_training_actions_user}} - {{vars.nexus_training_actions_repo}}
       - name: List artifacts in repo
         uses: docker://curlimages/curl:latest
         shell: sh
