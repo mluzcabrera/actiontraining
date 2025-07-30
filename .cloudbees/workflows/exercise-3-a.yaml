@@ -6,11 +6,7 @@ on:
 jobs:
   use-action:
     steps:
-      - name: use action (job step name)
-        uses: mluzcabrera/testaction@main
-        with:
-          string-val: 'test string'
-      - name: use action2 (job step name)
-        uses: mluzcabrera/testaction@main
+      - name: Create Upload and Register binary
+        uses: mluzcabrera/actiontraining@main
         with:
           string-val: 'test string'
