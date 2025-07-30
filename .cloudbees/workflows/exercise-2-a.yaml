@@ -6,14 +6,21 @@ on:
     inputs:
       pathtobinary:
         type: string
-        default: username.jar
+        default: example.txt
         required: true
 
 jobs:
   build:
     steps:
+      - name: Create file
+        uses: docker://golang:1.20.3-alpine3.17
+        shell: sh
+        run: echo "This is an example file" > ${{inputs.pathtobinary}}
       - name: Upload to Nexus
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
         run: |
-          curl -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_url}}
+          curl -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} |
+              --upload-file ${{inputs.pathtobinary}} |
+              -H "Content-Disposition: attachment; filename=${{inputs.pathtobinary}}" \
+              ${{vars.nexus_training_actions_url}}
