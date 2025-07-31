@@ -54,6 +54,6 @@ jobs:
         uses: cloudbees-io/register-build-artifact@v1
         with:
           version: 1.0.0
-          url: ${{ steps.geturl.outputs.artifacturl }}
+          url: ${{ steps.step6.outputs.artifacturl }}
           digest: sha256:abcdef1234567890
           name: ${{inputs.pathtobinary}}
