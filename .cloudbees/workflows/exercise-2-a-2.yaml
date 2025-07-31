@@ -31,6 +31,7 @@ jobs:
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
+          apk add --no-cache jq |
           echo ${{ steps.step6.outputs.digest }}
          
 
