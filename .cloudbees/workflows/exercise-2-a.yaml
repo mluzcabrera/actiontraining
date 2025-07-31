@@ -8,6 +8,10 @@ on:
         type: string
         default: example.txt
         required: true
+      artifactversion:
+        type: string
+        default: 1.0.0
+        required: true
 jobs:
   build:
     steps:
@@ -17,13 +21,6 @@ jobs:
         shell: sh
         run: |
           echo  ${{vars.nexus_training_actions_user}} - ${{vars.nexus_training_actions_repo}}
-      - name: List artifacts in repo
-        id: step2
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: |
-          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
-             "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Create file
         id: step3
         uses: docker://curlimages/curl:latest
@@ -52,7 +49,7 @@ jobs:
         id: step7
         uses: cloudbees-io/register-build-artifact@v1
         with:
-          version: 1.0.0
+          version: ${{inputs.artifactversion}}
           url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
           digest: ${{ steps.step6.outputs.digest }}
           name: ${{inputs.pathtobinary}}
