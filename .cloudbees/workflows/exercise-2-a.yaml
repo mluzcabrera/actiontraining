@@ -43,7 +43,8 @@ jobs:
         shell: sh
         run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
-              ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}.sha256 > "$CLOUDBEES_OUTPUTS/artifacturl"       
+              ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}.sha256 > "$CLOUDBEES_OUTPUTS/artifacturl"      
+           | echo ${{ steps.geturl.outputs.artifacturl }}     
       - name: Register built artifact
         uses: cloudbees-io/register-build-artifact@v1
         with:
