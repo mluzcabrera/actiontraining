@@ -51,5 +51,5 @@ jobs:
         with:
           version: ${{inputs.artifactversion}}
           url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
-          digest: ${{ steps.step6.outputs.digest }}
+          digest: hardcoded # $(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | jq -r '.items[] | select(.path == "${{inputs.pathtobinary}}") | .checksum.md5' )
           name: ${{inputs.pathtobinary}}
