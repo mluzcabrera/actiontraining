@@ -18,33 +18,9 @@ jobs:
         uses: docker://ganeshpl/alpine-jq
         shell: sh
         run: |
-          echo "$(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | jq -r '.items[] | select(.path == "${{inputs.pathtobinary}}") | .checksum.md5' )" > "$CLOUDBEES_OUTPUTS/caca"
+          echo "+++""$(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | jq -r '.items[] | select(.path == "${{inputs.pathtobinary}}") | .checksum.md5' )+++" > "$CLOUDBEES_OUTPUTS/caca"
       - name: print
         uses: docker://alpine:3.18
         id: step2
-        run: echo "+++"${{steps.step6.outputs.caca}}"+++"
-
-  job2:
-    needs: build
-    steps: 
-      - name: print
-        uses: docker://alpine:3.18
-        id: step2
-        run: echo ${{needs.build.outputs.md5}}
-      - name: Register built artifact
-        id: step777
-        uses: cloudbees-io/register-build-artifact@v1
-        with:
-          version: caca
-          url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
-          digest: 92721feddc223cee1614c44d90062ebc
-          name: ${{inputs.pathtobinary}}  
-      - name: Register built artifact
-        id: step77
-        uses: cloudbees-io/register-build-artifact@v1
-        with:
-          version: caca
-          url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
-          digest: ${{needs.build.outputs.md5}}
-          name: ${{inputs.pathtobinary}}
+        run: echo ${{steps.step6.outputs.caca}}
 
