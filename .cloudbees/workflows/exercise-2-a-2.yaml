@@ -11,6 +11,13 @@ on:
 jobs:
   build:
     steps:
+      - name: echo
+        id: step7
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          apk add --no-cache jq |
+          echo "caca"         
       - name: Get artifact digest
         id: step6
         uses: docker://curlimages/curl:latest
@@ -26,11 +33,4 @@ jobs:
              # | grep -A10 '"path":"example.txt"' \
              #| grep '"md5"' \
               #| sed -E 's/.*"md5":"([^"]+)".*/\1/')"
-      - name: echo
-        id: step7
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: |
-          apk add --no-cache jq |
-          echo "caca"         
 
