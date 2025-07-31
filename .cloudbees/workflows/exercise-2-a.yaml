@@ -12,33 +12,38 @@ jobs:
   build:
     steps:
       - name: Print vars
+        id: step1
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
           echo  ${{vars.nexus_training_actions_user}} - ${{vars.nexus_training_actions_repo}}
       - name: List artifacts in repo
+        id: step2
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Create file
+        id: step3
         uses: docker://curlimages/curl:latest
         shell: sh
         run: echo "This is an example file - $(date)" > ${{inputs.pathtobinary}}
       - name: Upload to Nexus
+        id: step4
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
           curl -v -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_repo}}
       - name: List artifacts in repo
+        id: step5
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Get artifact url
-        id: geturl
+        id: step6
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
@@ -46,6 +51,7 @@ jobs:
               ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}.sha256 > "$CLOUDBEES_OUTPUTS/artifacturl"      
            | echo ${{ steps.geturl.outputs.artifacturl }}     
       - name: Register built artifact
+        id: step7
         uses: cloudbees-io/register-build-artifact@v1
         with:
           version: 1.0.0
