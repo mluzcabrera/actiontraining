@@ -11,25 +11,10 @@ on:
 jobs:
   build:
     steps:
-      - name: echo
-        id: step7
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: |
-          apk add --no-cache jq |       
       - name: Get artifact digest
         id: step6
-        uses: docker://curlimages/curl:latest
+        uses: docker://jess/curl-jq
         shell: sh
         run: |
-          echo "MD5: $(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training') "
-      - name: Get artifact digest
-        id: step66
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: |
-          echo "MD5: $(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | grep -A20 '"path":"example.txt"' ) "
-             # | grep -A10 '"path":"example.txt"' \
-             #| grep '"md5"' \
-              #| sed -E 's/.*"md5":"([^"]+)".*/\1/')"
+          echo "MD5: $(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training') | jq -r '.items[] | select(.path == "example.txt") | .checksum.md5'"
 
