@@ -44,14 +44,10 @@ jobs:
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Get artifact digest
         id: step6
-        uses: docker://curlimages/curl:latest
+        uses: docker://ganeshpl/alpine-jq
         shell: sh
         run: |
-          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
-              'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' \
-              | grep -A10 '"path":"${{inputs.pathtobinary}}"' \
-              | grep '"md5"' \
-              | sed -E 's/.*"md5":"([^"]+)".*/\1/' > "$CLOUDBEES_OUTPUTS/digest"       
+          curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | jq -r '.items[] | select(.path == "example.txt") | .checksum.md5' > "$CLOUDBEES_OUTPUTS/digest"       
       - name: Register built artifact
         id: step7
         uses: cloudbees-io/register-build-artifact@v1
