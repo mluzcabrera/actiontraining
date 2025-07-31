@@ -16,8 +16,7 @@ jobs:
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          apk add --no-cache jq |
-          echo "caca"         
+          apk add --no-cache jq |       
       - name: Get artifact digest
         id: step6
         uses: docker://curlimages/curl:latest
