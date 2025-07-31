@@ -27,7 +27,8 @@ jobs:
         uses: docker://alpine:3.18
         id: step2
         run:  |
-          echo $(echo ${{steps.step6.outputs.caca}} | tr -d '[:space:]')   
+          cleaned=$(echo ${{steps.step6.outputs.caca}} | tr -d '[:space:]')   
+          echo "Cleaned:  '$cleaned'"
       - name: Register built artifact
         id: step7
         uses: cloudbees-io/register-build-artifact@v1
