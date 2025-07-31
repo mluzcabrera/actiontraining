@@ -37,10 +37,17 @@ jobs:
         run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
+      - name: Get artifact url
+        id: geturl
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+              ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}.sha256 > "$CLOUDBEES_OUTPUTS/artifacturl"       
       - name: Register built artifact
         uses: cloudbees-io/register-build-artifact@v1
         with:
           version: 1.0.0
-          url: https://hub.docker.com/repository/docker/example
+          url: ${{ steps.geturl.outputs.artifacturl }}
           digest: sha256:abcdef1234567890
           name: ${{inputs.pathtobinary}}
