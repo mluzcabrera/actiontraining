@@ -18,7 +18,7 @@ jobs:
         run: |
           curl -v -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
               'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' \
-              | grep -A10 '"path":"${{inputs.pathtobinary}}"'
+              | grep -A10 '"path":"${{inputs.pathtobinary}}"' > "$CLOUDBEES_OUTPUTS/digest"
       - name: echo
         id: step7
         uses: docker://curlimages/curl:latest
