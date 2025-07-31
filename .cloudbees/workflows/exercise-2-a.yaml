@@ -42,12 +42,12 @@ jobs:
         run: |
           curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
-      - name: Get artifact url
+      - name: Get artifact digest
         id: step6
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          curl -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
               'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' \
               | jq -r '.items[] | select(.path=="example.txt") | " \(.checksum.sha256)"'          
       - name: Register built artifact
