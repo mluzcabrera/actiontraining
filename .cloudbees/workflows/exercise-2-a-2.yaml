@@ -22,7 +22,7 @@ jobs:
       - name: print
         uses: docker://alpine:3.18
         id: step2
-        run: echo ${{steps.step6.outputs.caca}}
+        run: echo +++${{steps.step6.outputs.caca}}+++
 
   job2:
     needs: build
