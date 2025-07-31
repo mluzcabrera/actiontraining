@@ -5,7 +5,9 @@ inputs:
   pathtobinary:  
     description: 'Path to binary'
     required: true
-
+  artifactversion:
+    description: 'version'
+    required: true
 
 runs:
   using: composite
