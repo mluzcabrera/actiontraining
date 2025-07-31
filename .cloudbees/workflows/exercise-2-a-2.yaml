@@ -1,0 +1,31 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: Exercise 2 A
+on:
+  workflow_dispatch:
+    inputs:
+      pathtobinary:
+        type: string
+        default: example.txt
+        required: true
+jobs:
+  build:
+    steps:
+      - name: Get artifact digest
+        id: step6
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          curl -v -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+              'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' \
+              | grep -A10 '"path":"${{inputs.pathtobinary}}"' \
+              | grep '"md5"' \
+              | sed -E 's/.*"md5":"([^"]+)".*/\1/' > "$CLOUDBEES_OUTPUTS/digest" 
+      - name: echo
+        id: step7
+        uses: docker://curlimages/curl:latest
+        shell: sh
+        run: |
+          echo ${{ steps.step6.outputs.digest }}
+         
+
