@@ -32,7 +32,7 @@ jobs:
         id: step2
         run: echo ${{needs.build.outputs.md5}}
       - name: Register built artifact
-        id: step77
+        id: step777
         uses: cloudbees-io/register-build-artifact@v1
         with:
           version: caca
