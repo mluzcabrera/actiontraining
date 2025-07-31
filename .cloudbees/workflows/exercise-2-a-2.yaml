@@ -27,5 +27,5 @@ jobs:
         with:
           version: caca
           url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
-          digest: ${{ steps.step6.outputs.caca }}
+          digest: ${{inputs.pathtobinary}}
           name: ${{inputs.pathtobinary}}
