@@ -16,9 +16,11 @@ jobs:
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          curl -v -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
-              'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' \
-              | grep -A10 '"path":"${{inputs.pathtobinary}}"' > "$CLOUDBEES_OUTPUTS/digest"
+          echo "MD5: $(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' \
+               "https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training" \
+              | grep -A10 '"path":"example.txt"' \
+              | grep '"md5"' \
+              | sed -E 's/.*"md5":"([^"]+)".*/\1/')"
       - name: echo
         id: step7
         uses: docker://curlimages/curl:latest
