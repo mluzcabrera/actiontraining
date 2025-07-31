@@ -51,7 +51,7 @@ jobs:
               'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' \
               | grep -A10 '"path":"${{inputs.pathtobinary}}"' \
               | grep '"md5"' \
-              | sed -E 's/.*"md5":"([^"]+)".*/\1/'         
+              | sed -E 's/.*"md5":"([^"]+)".*/\1/' > "$CLOUDBEES_OUTPUTS/digest"       
       - name: Register built artifact
         id: step7
         uses: cloudbees-io/register-build-artifact@v1
