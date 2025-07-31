@@ -19,3 +19,4 @@ jobs:
         uses: mluzcabrera/actiontraining@main
         with:
           pathtobinary: ${{inputs.pathtobinary}}
+          artifactversion: ${{inputs.artifactversion}}
