@@ -22,5 +22,14 @@ jobs:
       - name: print
         uses: docker://alpine:3.18
         id: step2
-        run: echo ${{steps.step6.outputs.caca}}
+        run:  |
+          echo ${{steps.step6.outputs.caca}}
+      - name: Register built artifact
+        id: step7
+        uses: cloudbees-io/register-build-artifact@v1
+        with:
+          version: ${{inputs.artifactversion}}
+          url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
+          digest: ${{steps.step6.outputs.caca}}
+          name: ${{inputs.pathtobinary}}
 
