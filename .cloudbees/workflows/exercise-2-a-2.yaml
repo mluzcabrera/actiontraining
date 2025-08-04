@@ -3,19 +3,7 @@ kind: workflow
 name: Exercise 2 A
 on:
   workflow_dispatch:
-    inputs:
-      pathtobinary:
-        type: string
-        default: example.txt
-        required: true
-      artifactversion:
-        type: string
-        default: 1.0.0
-        required: true
-      digest:
-        type: string
-        default: "a0123456789a"
-        required: true
+
 jobs:
   build:
     steps:
@@ -29,7 +17,7 @@ jobs:
         id: step7
         uses: cloudbees-io/register-build-artifact@v1
         with:
-          version: ${{inputs.artifactversion}}
-          url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
+          version: "version"
+          url: "url"
           digest: ${{steps.step6.outputs.digest}} 
-          name: ${{inputs.pathtobinary}}
+          name: "name"
