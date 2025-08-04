@@ -24,7 +24,7 @@ jobs:
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          echo  $NEXUS_USERNAME - $NEXUS_PASSWORD
+          echo  $NEXUS_USERNAME - $NEXUS_PASSWORD - $REPO
       - name: Create file
         id: step3
         uses: docker://curlimages/curl:latest
