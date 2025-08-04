@@ -14,13 +14,17 @@ on:
         required: true
 jobs:
   build:
+    env:
+      NEXUS_USERNAME: ${{vars.nexus_training_actions_user}}
+      NEXUS_PASSWORD: ${{secrets.nexus_training_actions_secret}}
+      NEXUS_REPO: ${{vars.nexus_training_actions_repo}}
     steps:
       - name: Print vars
         id: step1
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          echo  ${{vars.nexus_training_actions_user}} - ${{vars.nexus_training_actions_repo}}
+          echo  $NEXUS_USERNAME - $NEXUS_PASSWORD - $NEXUS_REPO
       - name: Create file
         id: step3
         uses: docker://curlimages/curl:latest
@@ -31,20 +35,20 @@ jobs:
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          curl -v -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_repo}}
+          curl -v -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file ${{inputs.pathtobinary}} $NEXUS_REPO
       - name: List artifacts in repo
         id: step5
         uses: docker://curlimages/curl:latest
         shell: sh
         run: |
-          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
+          curl -s -u $NEXUS_USERNAME:$NEXUS_PASSWORD \
              "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Get artifact digest
         id: step6
         uses: docker://ganeshpl/alpine-jq
         shell: sh
         run: |
-          echo -n "$(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | jq -r '.items[] | select(.path == "${{inputs.pathtobinary}}") | .checksum.md5' )" > "$CLOUDBEES_OUTPUTS/digest"
+          echo -n "$(echo "$NEXUS_PASSWORD" | curl -s -u "$NEXUS_USERNAME" 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | jq -r '.items[] | select(.path == "${{inputs.pathtobinary}}") | .checksum.md5')" > $CLOUDBEES_OUTPUTS/digest
       - name: Register built artifact
         id: step7
         uses: cloudbees-io/register-build-artifact@v1
