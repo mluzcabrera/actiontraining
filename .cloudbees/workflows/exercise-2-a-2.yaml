@@ -12,7 +12,7 @@ jobs:
         uses: docker://ganeshpl/alpine-jq
         shell: sh
         run: |
-          echo "a0123456789a" > "$CLOUDBEES_OUTPUTS/digest"
+          echo -n "$(curl -s -u '${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}}' 'https://nexus.cloudbees.guru:8081/service/rest/v1/assets?repository=unify-docker-training' | jq -r '.items[] | select(.path == "${{inputs.pathtobinary}}") | .checksum.md5' )" > "$CLOUDBEES_OUTPUTS/digest"
       - name: Register built artifact
         id: step7
         uses: cloudbees-io/register-build-artifact@v1
