@@ -19,30 +19,6 @@ on:
 jobs:
   build:
     steps:
-      - name: Print vars
-        id: step1
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: |
-          echo  ${{vars.nexus_training_actions_user}} - ${{vars.nexus_training_actions_repo}}
-      - name: Create file
-        id: step3
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: echo "This is an example file - $(date)" > ${{inputs.pathtobinary}}
-      - name: Upload to Nexus
-        id: step4
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: |
-          curl -v -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} --upload-file ${{inputs.pathtobinary}} ${{vars.nexus_training_actions_repo}}
-      - name: List artifacts in repo
-        id: step5
-        uses: docker://curlimages/curl:latest
-        shell: sh
-        run: |
-          curl -s -u ${{vars.nexus_training_actions_user}}:${{secrets.nexus_training_actions_secret}} \
-             "https://nexus.cloudbees.guru:8081/service/rest/v1/search?repository=unify-docker-training" \
       - name: Get artifact digest
         id: step6
         uses: docker://ganeshpl/alpine-jq
@@ -55,5 +31,5 @@ jobs:
         with:
           version: ${{inputs.artifactversion}}
           url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
-          digest: ${{steps.step6.outputs.digest}} #${{inputs.digest}}
+          digest: ${{steps.step6.outputs.digest}} 
           name: ${{inputs.pathtobinary}}
