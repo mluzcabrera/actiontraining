@@ -54,6 +54,6 @@ jobs:
         uses: cloudbees-io/register-build-artifact@v1
         with:
           version: ${{inputs.artifactversion}}
-          url: $NEXUS_REPO${{inputs.pathtobinary}}
+          url: ${{vars.nexus_training_actions_repo}}${{inputs.pathtobinary}}
           digest: ${{steps.step6.outputs.digest}}
           name: ${{inputs.pathtobinary}}
