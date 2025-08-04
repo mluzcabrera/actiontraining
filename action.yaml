@@ -8,13 +8,12 @@ inputs:
   artifactversion:
     description: 'version'
     required: true
-
+env:
+  NEXUS_USERNAME: ${{vars.nexus_training_actions_user}}
+  NEXUS_PASSWORD: ${{secrets.nexus_training_actions_secret}}
+  NEXUS_REPO: ${{vars.nexus_training_actions_repo}}
 runs:
   using: composite
-  env:
-      NEXUS_USERNAME: ${{vars.nexus_training_actions_user}}
-      NEXUS_PASSWORD: ${{secrets.nexus_training_actions_secret}}
-      NEXUS_REPO: ${{vars.nexus_training_actions_repo}}
   steps:
       - name: Print vars
         uses: docker://curlimages/curl:latest
