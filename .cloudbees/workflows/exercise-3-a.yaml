@@ -14,6 +14,10 @@ on:
         required: true
 jobs:
   create_upload_register_binary:
+    env:
+      NEXUS_USERNAME: ${{vars.nexus_training_actions_user}}
+      NEXUS_PASSWORD: ${{secrets.nexus_training_actions_secret}}
+      NEXUS_REPO: ${{vars.nexus_training_actions_repo}}
     steps:
       - name: Create Upload and Register binary
         uses: mluzcabrera/actiontraining@main
